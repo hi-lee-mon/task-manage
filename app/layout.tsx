@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={cn(notoSansJp.className, 'min-h-dvh')}>
+      <body className={cn(notoSansJp.className, 'min-h-dvh flex flex-col')}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -29,7 +29,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          {children}
+          <main className="flex-1 bg-muted/40  px-10 pt-4">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>
