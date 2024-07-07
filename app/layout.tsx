@@ -2,10 +2,9 @@ import type { Metadata } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
-import Footer from '../components/layout/footer'
-import Header from '../components/layout/header'
 import { cn } from '@/lib/utils'
 import { appConstants } from '@/constants/app'
+import { PassCodeContextProvider } from '@/context/pass-code-context'
 
 const notoSansJp = Noto_Sans_JP({ subsets: ['latin'] })
 
@@ -21,16 +20,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={cn(notoSansJp.className, 'min-h-dvh flex flex-col')}>
+      <body className={notoSansJp.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <main className="flex-1 bg-muted/40  px-10 pt-4">{children}</main>
-          <Footer />
+          <PassCodeContextProvider>
+            <main className="min-h-dvh flex flex-col">{children}</main>
+          </PassCodeContextProvider>
         </ThemeProvider>
       </body>
     </html>

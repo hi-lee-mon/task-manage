@@ -18,6 +18,8 @@ import Item from '@/components/kanban/item'
 import Container from '@/components/kanban/container'
 import { useState, useMemo } from 'react'
 import { ItemFormSchemaType } from '@/components/kanban/itemFormSchema'
+import { redirect, useRouter } from 'next/navigation'
+import { usePassCodeContext } from '@/context/pass-code-context'
 
 const defaultContainers: ContainerType[] = [
   {
@@ -35,6 +37,12 @@ const defaultContainers: ContainerType[] = [
 ]
 
 export default function Home() {
+  const router = useRouter()
+  const { passCode } = usePassCodeContext()
+  if (passCode === null) {
+    router.push('/login')
+  }
+
   const [containers, setContainers] =
     useState<ContainerType[]>(defaultContainers)
   const containerIds = useMemo(() => containers.map((c) => c.id), [containers])
