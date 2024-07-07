@@ -53,7 +53,7 @@ export default function Container(props: ContainerProps) {
       {...listeners}
       {...attributes}
       className={clsx(
-        'shadow-sm bg-card border rounded-md p-4 flex flex-col gap-y-4 ',
+        'h-[900px] overflow-x-auto shadow-sm bg-card border rounded-md p-4 flex flex-col gap-y-4 ',
         isDragging && 'opacity-50',
       )}
     >
@@ -70,11 +70,13 @@ export default function Container(props: ContainerProps) {
         submitText="追加"
         isContinuousCreation
       />
-      <h1 className="text-xl border-b pb-2 mb-6">
+      <h1 className="flex text-xl border-b pb-2 mb-6">
         {container.title}
         <span className="ml-2">
           {items.reduce((acc, item) => acc + item.hours, 0)}h
         </span>
+        <span className="flex-1"></span>
+        <span className="ml-2">{items.length}件</span>
       </h1>
       <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
         <SortableContext items={itemIds}>

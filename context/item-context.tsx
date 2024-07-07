@@ -70,13 +70,13 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  const restoreItem = (deletedItemId: ItemId) => {
+  const restoreItem = (restoreItemId: ItemId) => {
     setItems((prevItems) => {
-      const i = deletedItems.find((item) => item.id === deletedItemId)
+      const i = deletedItems.find((item) => item.id === restoreItemId)
       return i ? [i, ...prevItems] : prevItems
     })
     setDeletedItems((prevItems) => {
-      return prevItems.filter((item) => item.id !== deletedItemId)
+      return prevItems.filter((item) => item.id !== restoreItemId)
     })
   }
 

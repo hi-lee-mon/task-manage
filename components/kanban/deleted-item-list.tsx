@@ -17,9 +17,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
 import { Button } from '../ui/button'
+import { useState } from 'react'
+import clsx from 'clsx'
 
 export default function DeletedItemList() {
   const { deletedItems, restoreItem } = useItemContext()
+  const [isEditing, setIsEditing] = useState(false)
   return (
     <Card>
       <CardHeader className="px-7">
@@ -33,15 +36,26 @@ export default function DeletedItemList() {
               <TableHead>タイトル</TableHead>
               <TableHead>メモ</TableHead>
               <TableHead>実績</TableHead>
+              <TableHead>作成日</TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {deletedItems.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{`${item.categoryNumber}-${item.groupNumber}`}</TableCell>
-                <TableCell>{item.title}</TableCell>
-                <TableCell>{item.memo}</TableCell>
+                <TableCell className="w-96">{item.title}</TableCell>
+                <TableCell
+                  onClick={() => setIsEditing((prev) => !prev)}
+                  className={clsx(
+                    'w-96 text-sm line-clamp-1',
+                    isEditing && 'line-clamp-none', // クリックで全て表示する
+                  )}
+                >
+                  {item.memo}
+                </TableCell>
                 <TableCell>{item.hours}</TableCell>
+                <TableCell>{item.createdAt}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

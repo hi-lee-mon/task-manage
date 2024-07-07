@@ -10,13 +10,14 @@ import { Button } from '../ui/button'
 import ItemFormDialog from './item-form-dialog'
 import { useItemContext } from '@/context/item-context'
 import { useToast } from '@/components/ui/use-toast'
+import { ToastAction } from '@radix-ui/react-toast'
 
 type ItemProps = {
   item: ItemType
 }
 
 export default function Item(props: ItemProps) {
-  const { editItem, deleteItem } = useItemContext()
+  const { editItem, deleteItem, restoreItem } = useItemContext()
   const { toast } = useToast()
   const { item } = props
   const [isEditing, setIsEditing] = useState(false)
@@ -47,7 +48,7 @@ export default function Item(props: ItemProps) {
       {...attributes}
       {...listeners}
       className={clsx(
-        'relative h-32 rounded-md shadow-sm bg-card p-4 border overflow-y-auto hover:border-blue-500 transition duration-150',
+        'relative min-h-32 rounded-md shadow-sm bg-card p-4 border overflow-y-auto hover:border-blue-500 transition duration-150',
         isDragging && 'opacity-50 border-blue-500',
       )}
     >
@@ -73,7 +74,6 @@ export default function Item(props: ItemProps) {
                     deleteItem(item.id)
                     toast({
                       title: 'アイテムを削除しました',
-                      // description: 'アイテムを削除しました',
                       variant: 'destructive',
                     })
                   }}
@@ -98,7 +98,7 @@ export default function Item(props: ItemProps) {
           onClick={() => setIsEditing((prev) => !prev)}
           className={clsx(
             'text-sm line-clamp-3',
-            isEditing && 'line-clamp-none',
+            isEditing && 'line-clamp-none', // クリックで全て表示する
           )}
         >
           {item.memo}

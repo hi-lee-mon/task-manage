@@ -5,7 +5,7 @@ export const itemFormSchema = z.object({
   groupNumber: z.string().min(1, 'グループNo.は必須です').trim(),
   title: z.string().min(1, 'タイトルは必須です').trim(),
   hours: z.preprocess((val) => Number(val), z.number()),
-  memo: z.string().min(1, 'メモは必須です'),
+  memo: z.string(),
   links: z.array(
     z
       .object({
