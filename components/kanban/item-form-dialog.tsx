@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../ui/textarea'
@@ -62,6 +62,8 @@ export default function ItemFormDialog(props: Props) {
 
   const [open, setOpen] = useState(false)
 
+  const categoryNumberRef = useRef<HTMLInputElement>(null)
+
   // TODO: ダイアログとフォームのコンポーネントをわける。今のままだとデフォルトバリューがリセットされない。ダイアログ表示がtrueになったときにuseFormを持つコンポーネントを表示させるようにする
   const methods = useForm<ItemFormSchemaType>({
     resolver: zodResolver(itemFormSchema),
@@ -87,6 +89,9 @@ export default function ItemFormDialog(props: Props) {
             className="space-y-4"
             onSubmit={methods.handleSubmit((formData) => {
               methods.reset()
+              if (categoryNumberRef.current) {
+                categoryNumberRef.current.focus()
+              }
               !isContinuousCreation && setOpen(false)
               handleSubmit(formData, targetId)
             })}
@@ -99,7 +104,7 @@ export default function ItemFormDialog(props: Props) {
                   <FormItem>
                     <FormLabel>カテゴリNo.</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} ref={categoryNumberRef} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -134,12 +139,12 @@ export default function ItemFormDialog(props: Props) {
             />
             <FormField
               control={methods.control}
-              name="hours"
+              name="memo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>実績</FormLabel>
+                  <FormLabel>メモ</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Textarea className="min-h-[20px]" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -147,12 +152,12 @@ export default function ItemFormDialog(props: Props) {
             />
             <FormField
               control={methods.control}
-              name="memo"
+              name="hours"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>メモ</FormLabel>
+                  <FormLabel>実績</FormLabel>
                   <FormControl>
-                    <Textarea className="min-h-[20px]" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
