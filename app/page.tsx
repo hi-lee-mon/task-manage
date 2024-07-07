@@ -34,65 +34,6 @@ const defaultContainers: ContainerType[] = [
   },
 ]
 
-const defaultItems: ItemType[] = [
-  {
-    id: '1',
-    containerId: 'onTrack',
-    categoryNumber: '2',
-    groupNumber: '30',
-    title: 'TCF作成',
-    hours: 1,
-    memo: 'TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。',
-    links: [
-      {
-        title: 'Google',
-        url: 'https://www.google.co.jp/',
-      },
-      {
-        title: 'TCF作成TCF作成TCF作成TCF作成TCF作成',
-        url: 'https://www.google.co.jp/',
-      },
-      {
-        title: 'マスタ管理',
-        url: 'https://www.google.co.jp/',
-      },
-      {
-        title: 'マスタ管理',
-        url: 'https://www.google.co.jp/',
-      },
-    ],
-    createdAt: '2023-01-01T00:00:00.000Z',
-  },
-  {
-    id: '2',
-    containerId: 'onTrack',
-    categoryNumber: '2',
-    groupNumber: '30',
-    title: 'TCF作成',
-    hours: 3.5,
-    memo: 'TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。TCFの作成についての説明を書いてください。',
-    links: [
-      {
-        title: 'Google',
-        url: 'https://www.google.co.jp/',
-      },
-      {
-        title: 'TCF作成TCF作成TCF作成TCF作成TCF作成',
-        url: 'https://www.google.co.jp/',
-      },
-      {
-        title: 'マスタ管理',
-        url: 'https://www.google.co.jp/',
-      },
-      {
-        title: 'マスタ管理',
-        url: 'https://www.google.co.jp/',
-      },
-    ],
-    createdAt: '2023-01-01T00:00:00.000Z',
-  },
-]
-
 export default function Home() {
   const [containers, setContainers] =
     useState<ContainerType[]>(defaultContainers)
@@ -102,8 +43,6 @@ export default function Home() {
     null,
   )
   const [activeItem, setActiveItem] = useState<ItemType | null>(null)
-
-  console.log(items)
 
   const addItem = (form: ItemFormSchemaType, containerId: UniqueIdentifier) => {
     const newItem: ItemType = {
