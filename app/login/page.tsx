@@ -30,6 +30,7 @@ export default function Page() {
             <Label htmlFor="passCode">パスコード</Label>
             <Input
               id="passCode"
+              type="password"
               required
               value={inputPassCode}
               onChange={(e) => setInputPassCode(e.target.value)}

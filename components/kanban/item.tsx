@@ -1,22 +1,24 @@
+'use client'
 import clsx from 'clsx'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { ItemType } from '@/types/kanban/Item'
-import { Pen } from 'lucide-react'
+import { Pen, Trash } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import ItemFormDialog from './item-form-dialog'
-import { ItemFormSchemaType } from './itemFormSchema'
-import { UniqueIdentifier } from '@dnd-kit/core'
+import { useItemContext } from '@/context/item-context'
+import { useToast } from '@/components/ui/use-toast'
 
 type ItemProps = {
   item: ItemType
-  editItem: (form: ItemFormSchemaType, itemId: UniqueIdentifier) => void
 }
 
 export default function Item(props: ItemProps) {
-  const { item, editItem } = props
+  const { editItem, deleteItem } = useItemContext()
+  const { toast } = useToast()
+  const { item } = props
   const [isEditing, setIsEditing] = useState(false)
   const {
     setNodeRef,
@@ -45,7 +47,7 @@ export default function Item(props: ItemProps) {
       {...attributes}
       {...listeners}
       className={clsx(
-        'h-32 rounded-md shadow-sm bg-card p-4 border overflow-y-auto hover:border-blue-500 transition duration-150',
+        'relative h-32 rounded-md shadow-sm bg-card p-4 border overflow-y-auto hover:border-blue-500 transition duration-150',
         isDragging && 'opacity-50 border-blue-500',
       )}
     >
@@ -59,12 +61,34 @@ export default function Item(props: ItemProps) {
           <ItemFormDialog
             dialogTitle="アイテム編集"
             triggerContent={
-              <Button variant="ghost" size="icon">
-                <Pen className="absolute h-[1.2rem] w-[1.2rem] " />
-                <span className="sr-only">編集</span>
-              </Button>
+              <div className="absolute right-0 top-0 flex gap-2">
+                <Button variant="ghost" size="icon">
+                  <Pen className=" h-[1.2rem] w-[1.2rem] " />
+                  <span className="sr-only">編集</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    deleteItem(item.id)
+                    toast({
+                      title: 'アイテムを削除しました',
+                      // description: 'アイテムを削除しました',
+                      variant: 'destructive',
+                    })
+                  }}
+                >
+                  <Trash className="text-red-500 h-[1.2rem] w-[1.2rem] " />
+                  <span className="sr-only">削除</span>
+                </Button>
+              </div>
             }
-            handleSubmit={editItem}
+            handleSubmit={(formData, itemId) => {
+              editItem(formData, itemId)
+              toast({
+                title: 'アイテムを更新しました',
+              })
+            }}
             targetId={item.id}
             defaultValues={item}
             submitText="更新"

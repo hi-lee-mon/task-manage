@@ -22,6 +22,9 @@ export default function Page() {
       <CusLink href="playground/next-layout" variant="outline">
         next-layout
       </CusLink>
+      <CusLink href="playground/local-storage" variant="outline">
+        local-storage
+      </CusLink>
     </div>
   )
 }

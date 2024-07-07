@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
-import { cn } from '@/lib/utils'
 import { appConstants } from '@/constants/app'
 import { PassCodeContextProvider } from '@/context/pass-code-context'
+import { Toaster } from '@/components/ui/toaster'
 
 const notoSansJp = Noto_Sans_JP({ subsets: ['latin'] })
 
@@ -29,6 +29,7 @@ export default function RootLayout({
         >
           <PassCodeContextProvider>
             <main className="min-h-dvh flex flex-col">{children}</main>
+            <Toaster />
           </PassCodeContextProvider>
         </ThemeProvider>
       </body>

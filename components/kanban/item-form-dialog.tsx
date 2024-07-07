@@ -1,16 +1,13 @@
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
-import { Button } from '../ui/button'
+'use client'
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
 import {
   FormControl,
   FormField,
@@ -18,14 +15,17 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { useRef, useState } from 'react'
-import { UniqueIdentifier } from '@dnd-kit/core'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Textarea } from '../ui/textarea'
-import { ItemFormSchemaType, itemFormSchema } from './itemFormSchema'
-import { Trash } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import { ItemId } from '@/types/kanban/Item'
 import { ContainerId } from '@/types/kanban/container'
+import { UniqueIdentifier } from '@dnd-kit/core'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Trash } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
+import { Button } from '../ui/button'
+import { Textarea } from '../ui/textarea'
+import { ItemFormSchemaType, itemFormSchema } from './itemFormSchema'
 
 type Props = {
   dialogTitle: string
