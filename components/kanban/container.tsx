@@ -44,8 +44,6 @@ export default function Container(props: ContainerProps) {
     transition,
   }
 
-  // TODO: containerの高さを自動的に計算する
-
   return (
     <div
       ref={setNodeRef}
@@ -53,7 +51,7 @@ export default function Container(props: ContainerProps) {
       {...listeners}
       {...attributes}
       className={clsx(
-        'h-[900px] overflow-x-auto shadow-sm bg-card border rounded-md p-4 flex flex-col gap-y-4 ',
+        'h-[800px] overflow-x-auto shadow-sm bg-card border rounded-md p-4 flex flex-col gap-y-4 ',
         isDragging && 'opacity-50',
       )}
     >

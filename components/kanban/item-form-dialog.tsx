@@ -21,7 +21,7 @@ import { ContainerId } from '@/types/kanban/container'
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Trash } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { Textarea } from '../ui/textarea'
@@ -60,14 +60,12 @@ export default function ItemFormDialog(props: Props) {
     handleSubmit,
   } = props
 
-  const [open, setOpen] = useState(false)
-
   const categoryNumberRef = useRef<HTMLInputElement>(null)
 
-  // TODO: ダイアログとフォームのコンポーネントをわける。今のままだとデフォルトバリューがリセットされない。ダイアログ表示がtrueになったときにuseFormを持つコンポーネントを表示させるようにする
   const methods = useForm<ItemFormSchemaType>({
     resolver: zodResolver(itemFormSchema),
     defaultValues,
+    values: defaultValues,
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -75,8 +73,10 @@ export default function ItemFormDialog(props: Props) {
     control: methods.control,
   })
 
+  // TODO: ダイアログの動的な部分が少ないので、フォームとダイアログを分離したい
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>{triggerContent}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]  overflow-y-auto">
         <DialogHeader>
@@ -92,7 +92,6 @@ export default function ItemFormDialog(props: Props) {
               if (categoryNumberRef.current) {
                 categoryNumberRef.current.focus()
               }
-              !isContinuousCreation && setOpen(false)
               handleSubmit(formData, targetId)
             })}
           >
@@ -214,7 +213,13 @@ export default function ItemFormDialog(props: Props) {
                 リンクを追加
               </Button>
               <div className="flex gap-4">
-                <Button type="submit">{submitText}</Button>
+                {isContinuousCreation ? (
+                  <Button type="submit">{submitText}</Button>
+                ) : (
+                  <DialogClose asChild>
+                    <Button type="submit">{submitText}</Button>
+                  </DialogClose>
+                )}
                 <DialogClose asChild>
                   <Button
                     type="button"

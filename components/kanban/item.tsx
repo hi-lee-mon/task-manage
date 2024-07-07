@@ -10,7 +10,6 @@ import { Button } from '../ui/button'
 import ItemFormDialog from './item-form-dialog'
 import { useItemContext } from '@/context/item-context'
 import { useToast } from '@/components/ui/use-toast'
-import { ToastAction } from '@radix-ui/react-toast'
 
 type ItemProps = {
   item: ItemType
@@ -48,7 +47,7 @@ export default function Item(props: ItemProps) {
       {...attributes}
       {...listeners}
       className={clsx(
-        'relative min-h-32 rounded-md shadow-sm bg-card p-4 border overflow-y-auto hover:border-blue-500 transition duration-150',
+        'relative min-h-32 rounded-md shadow-sm bg-card p-4 border hover:border-blue-500 transition duration-150',
         isDragging && 'opacity-50 border-blue-500',
       )}
     >
@@ -97,8 +96,8 @@ export default function Item(props: ItemProps) {
         <p
           onClick={() => setIsEditing((prev) => !prev)}
           className={clsx(
-            'text-sm line-clamp-3',
-            isEditing && 'line-clamp-none', // クリックで全て表示する
+            'text-sm line-clamp-3 overflow-hidden',
+            isEditing && 'line-clamp-none overflow-x-auto', // クリックで全て表示する
           )}
         >
           {item.memo}
