@@ -1,6 +1,6 @@
 'use client'
 import Container from '@/components/kanban/container'
-import DeletedItemList from '@/components/kanban/deleted-item-list'
+import DeletedItemTable from '@/components/kanban/deleted-item-table'
 import Item from '@/components/kanban/item'
 import { useItemContext } from '@/context/item-context'
 import { usePassCodeContext } from '@/context/pass-code-context'
@@ -170,7 +170,7 @@ export default function Kanban() {
           {activeItem && <Item item={activeItem} />}
         </DragOverlay>
       </DndContext>
-      <DeletedItemList />
+      <DeletedItemTable />
     </div>
   )
 }

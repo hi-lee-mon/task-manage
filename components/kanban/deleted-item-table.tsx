@@ -20,7 +20,7 @@ import { Button } from '../ui/button'
 import { useState } from 'react'
 import clsx from 'clsx'
 
-export default function DeletedItemList() {
+export default function DeletedItemTable() {
   const { deletedItems, restoreItem } = useItemContext()
   const [isEditing, setIsEditing] = useState(false)
   return (
