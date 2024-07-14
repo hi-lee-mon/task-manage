@@ -1,7 +1,7 @@
 'use client'
 
 import {
-  ColumnDef,
+  AccessorKeyColumnDef,
   ColumnFiltersState,
   SortingState,
   flexRender,
@@ -11,7 +11,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-
 import {
   Table,
   TableBody,
@@ -28,10 +27,25 @@ import React from 'react'
 import { DataTableViewOptions } from '@/components/table/data-table-viewOptions'
 import { Button } from '@/components/ui/button'
 import { useItemContext } from '@/context/item-context'
-import { toast, useToast } from '@/components/ui/use-toast'
+import { useToast } from '@/components/ui/use-toast'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { CommandList } from 'cmdk'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+  columns: AccessorKeyColumnDef<TData, TValue>[]
   data: TData[]
 }
 
@@ -42,8 +56,20 @@ export function DeletedItemTable<
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = useState({})
+  const [openCombobox, setOpenCombobox] = useState(false)
+  const [comboboxValue, setComboboxValue] = useState<string>('')
   const { restoreItems } = useItemContext()
   const { toast } = useToast()
+
+  const filterTargetOptions = columns.map((column) => ({
+    value: column.accessorKey,
+    label: column.meta,
+  })) as { value: string; label: string }[] // TODO:as使用しない方法を考えたい
+
+  const selectedComboboxLabel =
+    filterTargetOptions.find(
+      (filterColumn) => filterColumn.value === comboboxValue,
+    )?.label || ''
 
   const table = useReactTable({
     data,
@@ -69,12 +95,65 @@ export function DeletedItemTable<
 
   return (
     <div className="rounded-md border">
-      <div className="flex items-center py-4 mx-2">
+      <div className="flex items-center py-4 mx-2 gap-2">
+        <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={openCombobox}
+              className="w-[200px] justify-between"
+            >
+              {selectedComboboxLabel
+                ? selectedComboboxLabel
+                : '検索対象が未選択です'}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0">
+            <Command>
+              <CommandInput placeholder="検索対象を選択" />
+              <CommandEmpty>検索対象が見つかりません</CommandEmpty>
+              <CommandGroup>
+                <CommandList>
+                  {filterTargetOptions.map((option) => (
+                    <CommandItem
+                      key={option.value}
+                      value={option.value}
+                      onSelect={(currentValue) => {
+                        setComboboxValue(
+                          currentValue === comboboxValue ? '' : currentValue,
+                        )
+                        setOpenCombobox(false)
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          'mr-2 h-4 w-4',
+                          comboboxValue === option.value
+                            ? 'opacity-100'
+                            : 'opacity-0',
+                        )}
+                      />
+                      {option.label}
+                    </CommandItem>
+                  ))}
+                </CommandList>
+              </CommandGroup>
+            </Command>
+          </PopoverContent>
+        </Popover>
         <Input
-          placeholder="タイトルで絞り込む..."
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+          placeholder={
+            selectedComboboxLabel === ''
+              ? '検索対象を選択してください'
+              : `${selectedComboboxLabel}で絞り込む`
+          }
+          value={
+            (table.getColumn(comboboxValue)?.getFilterValue() as string) ?? ''
+          }
           onChange={(event) =>
-            table.getColumn('title')?.setFilterValue(event.target.value)
+            table.getColumn(comboboxValue)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -122,7 +201,7 @@ export function DeletedItemTable<
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                現在の削除タスクは0件です
               </TableCell>
             </TableRow>
           )}
