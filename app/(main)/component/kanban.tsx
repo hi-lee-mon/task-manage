@@ -1,6 +1,10 @@
 'use client'
 import Container from '@/components/kanban/container'
-import DeletedItemTable from '@/components/kanban/deleted-item-table'
+import { DeletedItemTable } from '@/components/kanban/deleted-item-table'
+import {
+  DeletedItemColumn,
+  columns,
+} from '@/components/kanban/deleted-item-table/columns'
 import Item from '@/components/kanban/item'
 import { useItemContext } from '@/context/item-context'
 import { usePassCodeContext } from '@/context/pass-code-context'
@@ -43,7 +47,7 @@ export default function Kanban() {
   ])
 
   const containerIds = useMemo(() => containers.map((c) => c.id), [containers])
-  const { items, setItems } = useItemContext()
+  const { items, deletedItems, setItems } = useItemContext()
 
   const [activeContainer, setActiveContainer] = useState<ContainerType | null>(
     null,
@@ -137,6 +141,17 @@ export default function Kanban() {
     }
   }
 
+  const deletedItemTableData: DeletedItemColumn[] = deletedItems.map(
+    (item) => ({
+      id: item.id,
+      taskId: `${item.groupNumber}-${item.categoryNumber}`,
+      title: item.title,
+      memo: item.memo,
+      hours: item.hours,
+      cratedAt: item.createdAt,
+    }),
+  )
+
   return (
     <div className="flex flex-col gap-4">
       <DndContext
@@ -170,7 +185,7 @@ export default function Kanban() {
           {activeItem && <Item item={activeItem} />}
         </DragOverlay>
       </DndContext>
-      <DeletedItemTable />
+      <DeletedItemTable columns={columns} data={deletedItemTableData} />
     </div>
   )
 }

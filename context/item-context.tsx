@@ -19,7 +19,7 @@ type ContextType = {
   addItem: (form: ItemFormSchemaType, containerId: UniqueIdentifier) => void
   editItem: (form: ItemFormSchemaType, itemId: ItemId) => void
   deleteItem: (itemId: ItemId) => void
-  restoreItem: (deletedItemId: ItemId) => void
+  restoreItems: (deletedItemIds: ItemId[]) => void
 }
 
 const Context = createContext<ContextType>({} as ContextType)
@@ -70,13 +70,17 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  const restoreItem = (restoreItemId: ItemId) => {
+  const restoreItems = (restoreItemIds: ItemId[]) => {
     setItems((prevItems) => {
-      const i = deletedItems.find((item) => item.id === restoreItemId)
-      return i ? [i, ...prevItems] : prevItems
+      return restoreItemIds.reduce((acc, restoreItemId) => {
+        const restoreItem = deletedItems.find(
+          (item) => item.id === restoreItemId,
+        )
+        return restoreItem ? [restoreItem, ...acc] : acc
+      }, prevItems)
     })
     setDeletedItems((prevItems) => {
-      return prevItems.filter((item) => item.id !== restoreItemId)
+      return prevItems.filter((item) => !restoreItemIds.includes(item.id))
     })
   }
 
@@ -89,7 +93,7 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
         addItem,
         editItem,
         deleteItem,
-        restoreItem,
+        restoreItems,
       }}
     >
       {children}

@@ -16,7 +16,7 @@ type ItemProps = {
 }
 
 export default function Item(props: ItemProps) {
-  const { editItem, deleteItem, restoreItem } = useItemContext()
+  const { editItem, deleteItem } = useItemContext()
   const { toast } = useToast()
   const { item } = props
   const [isEditing, setIsEditing] = useState(false)

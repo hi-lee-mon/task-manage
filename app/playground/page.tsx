@@ -25,6 +25,9 @@ export default function Page() {
       <CusLink href="playground/local-storage" variant="outline">
         local-storage
       </CusLink>
+      <CusLink href="playground/shadcn-ui-table" variant="outline">
+        shadcn-ui-table
+      </CusLink>
     </div>
   )
 }
