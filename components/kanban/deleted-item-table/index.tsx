@@ -57,19 +57,20 @@ export function DeletedItemTable<
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = useState({})
   const [openCombobox, setOpenCombobox] = useState(false)
-  const [comboboxValue, setComboboxValue] = useState<string>('')
+  const [comboboxValue, setComboboxValue] = useState<string>('title')
   const { restoreItems } = useItemContext()
   const { toast } = useToast()
 
-  const filterTargetOptions = columns.map((column) => ({
-    value: column.accessorKey,
-    label: column.meta,
-  })) as { value: string; label: string }[] // TODO:as使用しない方法を考えたい
+  const filterOptions = columns
+    .map((column) => ({
+      value: column.accessorKey,
+      label: column.meta,
+    }))
+    .filter((option) => option.value) as { value: string; label: string }[] // TODO:as使用しない方法を考えたい
 
   const selectedComboboxLabel =
-    filterTargetOptions.find(
-      (filterColumn) => filterColumn.value === comboboxValue,
-    )?.label || ''
+    filterOptions.find((filterOption) => filterOption.value === comboboxValue)
+      ?.label || ''
 
   const table = useReactTable({
     data,
@@ -116,14 +117,12 @@ export function DeletedItemTable<
               <CommandEmpty>検索対象が見つかりません</CommandEmpty>
               <CommandGroup>
                 <CommandList>
-                  {filterTargetOptions.map((option) => (
+                  {filterOptions.map((option) => (
                     <CommandItem
                       key={option.value}
                       value={option.value}
                       onSelect={(currentValue) => {
-                        setComboboxValue(
-                          currentValue === comboboxValue ? '' : currentValue,
-                        )
+                        setComboboxValue(currentValue)
                         setOpenCombobox(false)
                       }}
                     >
