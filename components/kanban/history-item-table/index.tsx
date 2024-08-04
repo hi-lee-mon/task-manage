@@ -43,6 +43,20 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CommandList } from 'cmdk'
 import { columns, HistoryItemColumn } from './columns'
+import {
+  AlertDialogHeader,
+  AlertDialogFooter,
+} from '@/components/ui/alert-dialog'
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog'
+import { set } from 'zod'
 
 interface DataTableProps {
   columns: typeof columns
@@ -55,7 +69,8 @@ export function HistoryItemTable({ columns, data }: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({})
   const [openCombobox, setOpenCombobox] = useState(false)
   const [comboboxValue, setComboboxValue] = useState<string>('title')
-  const { restoreHistoryItems } = useItemContext()
+  const [isOpenAlertDialog, setIsOpenAlertDialog] = useState(false)
+  const { restoreHistoryItems, deleteHistoryItems } = useItemContext()
   const { toast } = useToast()
 
   const filterTargetOptions = columns.map((column) => ({
@@ -85,7 +100,7 @@ export function HistoryItemTable({ columns, data }: DataTableProps) {
     },
   })
 
-  const originalRowIds = table
+  const selectedRowIds = table
     .getFilteredSelectedRowModel()
     .rows.map((row) => row.original)
     .map((row) => row.id)
@@ -209,24 +224,82 @@ export function HistoryItemTable({ columns, data }: DataTableProps) {
           </TableRow>
         </TableFooter>
       </Table>
-      <div className="flex justify-end m-4">
+      <div className="flex justify-end m-4 gap-6">
         <Button
-          variant="outline"
+          variant="destructive"
           onClick={() => {
-            if (originalRowIds.length < 1) {
+            if (selectedRowIds.length < 1) {
               toast({
-                title: '復元するアイテムを選択してください',
-                variant: 'destructive',
+                title: '完全に削除するアイテムを選択してください',
               })
               return
             }
-            restoreHistoryItems(originalRowIds)
-            setRowSelection({})
+            setIsOpenAlertDialog(true)
           }}
         >
-          選択したタスクを復元
+          選択したタスクを完全に削除する
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            if (selectedRowIds.length < 1) {
+              toast({
+                title: '戻すアイテムを選択してください',
+              })
+              return
+            }
+            restoreHistoryItems(selectedRowIds)
+            setRowSelection({})
+            toast({
+              title: 'タスクを戻しました',
+            })
+          }}
+        >
+          選択したタスクを戻す
         </Button>
       </div>
+      <AlertDialogDemo
+        isOpen={isOpenAlertDialog}
+        setIsOpen={setIsOpenAlertDialog}
+        action={() => {
+          deleteHistoryItems(selectedRowIds)
+          setRowSelection({})
+          toast({
+            title: '完全に削除しました',
+          })
+          setIsOpenAlertDialog(false)
+        }}
+      />
     </div>
+  )
+}
+
+export const AlertDialogDemo = (props: {
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  action: () => void
+}) => {
+  return (
+    <AlertDialog open={props.isOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline">Show Dialog</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>本当に削除して良いですか？</AlertDialogTitle>
+          <AlertDialogDescription>
+            この操作は取り消すことができません。
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="flex gap-6">
+          <AlertDialogAction onClick={props.action}>
+            完全に削除する
+          </AlertDialogAction>
+          <AlertDialogCancel onClick={() => props.setIsOpen(false)}>
+            キャンセル
+          </AlertDialogCancel>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }

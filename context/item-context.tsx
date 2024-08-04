@@ -20,6 +20,7 @@ type ContextType = {
   editItem: (form: ItemFormSchemaType, itemId: ItemId) => void
   deleteItem: (itemId: ItemId) => void
   restoreHistoryItems: (historyItemIds: ItemId[]) => void
+  deleteHistoryItems: (historyItemIds: ItemId[]) => void
 }
 
 const Context = createContext<ContextType>({} as ContextType)
@@ -84,6 +85,12 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  const deleteHistoryItems = (historyItemIds: ItemId[]) => {
+    setHistoryItems((prevItems) => {
+      return prevItems.filter((item) => !historyItemIds.includes(item.id))
+    })
+  }
+
   return (
     <Context.Provider
       value={{
@@ -94,6 +101,7 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
         editItem,
         deleteItem,
         restoreHistoryItems,
+        deleteHistoryItems,
       }}
     >
       {children}
