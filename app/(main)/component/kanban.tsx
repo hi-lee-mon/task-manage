@@ -144,7 +144,7 @@ export default function Kanban() {
   const historyItemTableData: HistoryItemColumn[] = historyItems.map(
     (item) => ({
       id: item.id,
-      taskId: `${item.group}-${item.category}`,
+      taskId: item.group ? `${item.category}-${item.group}` : item.category,
       title: item.title,
       memo: item.memo,
       hours: item.hours,
