@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 export const itemFormSchema = z.object({
-  categoryNumber: z.string().min(1, 'カテゴリNo.は必須です').trim(),
-  groupNumber: z.string().min(1, 'グループNo.は必須です').trim(),
+  category: z.string().min(1, 'カテゴリは必須です').trim(),
+  group: z.string(),
   title: z.string().min(1, 'タイトルは必須です').trim(),
   hours: z.preprocess((val) => Number(val), z.number()),
   memo: z.string(),

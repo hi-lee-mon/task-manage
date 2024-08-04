@@ -5,8 +5,8 @@ export type ItemId = UniqueIdentifier
 export type ItemType = {
   id: ItemId
   containerId: ContainerId
-  categoryNumber: string
-  groupNumber: string
+  category: string
+  group: string
   title: string
   hours: number
   memo: string

@@ -54,7 +54,7 @@ export default function Item(props: ItemProps) {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm">{`[${item.categoryNumber}-${item.groupNumber}] `}</span>
+            <span className="text-sm">{`[${item.category}-${item.group}] `}</span>
             <h1 className="text-xl">{item.title}</h1>
             <span className="text-sm text-muted-foreground">{item.hours}h</span>
           </div>

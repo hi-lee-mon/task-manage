@@ -64,6 +64,7 @@ export default function Container(props: ContainerProps) {
             title: 'アイテムを追加しました',
           })
         }}
+        isContinuousCreation
         targetId={container.id}
         submitText="追加"
       />

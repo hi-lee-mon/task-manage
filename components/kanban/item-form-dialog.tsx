@@ -33,7 +33,7 @@ type CreateProps = {
   submitText: string
   targetId: ContainerId | ItemId
   defaultValues?: undefined
-  isContinuousCreation?: undefined
+  isContinuousCreation: true
   handleSubmit: (
     form: ItemFormSchemaType,
     containerId: UniqueIdentifier,
@@ -54,8 +54,8 @@ type UpdateProps = {
 }
 
 const DEFAULT_VALUES: ItemFormSchemaType = {
-  categoryNumber: '',
-  groupNumber: '',
+  category: '',
+  group: '',
   title: '',
   hours: 0,
   memo: '',
@@ -73,7 +73,7 @@ export default function ItemFormDialog(props: CreateProps | UpdateProps) {
     handleSubmit,
   } = props
 
-  const categoryNumberRef = useRef<HTMLInputElement>(null)
+  const categoryRef = useRef<HTMLInputElement>(null)
 
   const methods = useForm<ItemFormSchemaType>({
     resolver: zodResolver(itemFormSchema),
@@ -102,8 +102,8 @@ export default function ItemFormDialog(props: CreateProps | UpdateProps) {
             className="space-y-4"
             onSubmit={methods.handleSubmit((formData) => {
               methods.reset()
-              if (categoryNumberRef.current) {
-                categoryNumberRef.current.focus()
+              if (categoryRef.current) {
+                categoryRef.current.focus()
               }
               handleSubmit(formData, targetId)
             })}
@@ -111,12 +111,12 @@ export default function ItemFormDialog(props: CreateProps | UpdateProps) {
             <div className="flex justify-between">
               <FormField
                 control={methods.control}
-                name="categoryNumber"
+                name="category"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>カテゴリNo.</FormLabel>
                     <FormControl>
-                      <Input {...field} ref={categoryNumberRef} />
+                      <Input {...field} ref={categoryRef} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -124,7 +124,7 @@ export default function ItemFormDialog(props: CreateProps | UpdateProps) {
               />
               <FormField
                 control={methods.control}
-                name="groupNumber"
+                name="group"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>グループNo.</FormLabel>
