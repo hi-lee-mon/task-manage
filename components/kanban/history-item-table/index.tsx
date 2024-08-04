@@ -197,6 +197,7 @@ export function HistoryItemTable({ columns, data }: DataTableProps) {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
+                onClick={row.getToggleSelectedHandler()} // 行をクリックで選択できるようにする
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
