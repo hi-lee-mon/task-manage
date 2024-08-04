@@ -1,10 +1,10 @@
 'use client'
 import Container from '@/components/kanban/container'
-import { DeletedItemTable } from '@/components/kanban/deleted-item-table'
+import { HistoryItemTable } from '@/components/kanban/history-item-table'
 import {
-  DeletedItemColumn,
+  HistoryItemColumn,
   columns,
-} from '@/components/kanban/deleted-item-table/columns'
+} from '@/components/kanban/history-item-table/columns'
 import Item from '@/components/kanban/item'
 import { useItemContext } from '@/context/item-context'
 import { usePassCodeContext } from '@/context/pass-code-context'
@@ -47,7 +47,7 @@ export default function Kanban() {
   ])
 
   const containerIds = useMemo(() => containers.map((c) => c.id), [containers])
-  const { items, deletedItems, setItems } = useItemContext()
+  const { items, historyItems, setItems } = useItemContext()
 
   const [activeContainer, setActiveContainer] = useState<ContainerType | null>(
     null,
@@ -141,7 +141,7 @@ export default function Kanban() {
     }
   }
 
-  const deletedItemTableData: DeletedItemColumn[] = deletedItems.map(
+  const historyItemTableData: HistoryItemColumn[] = historyItems.map(
     (item) => ({
       id: item.id,
       taskId: `${item.groupNumber}-${item.categoryNumber}`,
@@ -185,7 +185,7 @@ export default function Kanban() {
           {activeItem && <Item item={activeItem} />}
         </DragOverlay>
       </DndContext>
-      <DeletedItemTable columns={columns} data={deletedItemTableData} />
+      <HistoryItemTable columns={columns} data={historyItemTableData} />
     </div>
   )
 }

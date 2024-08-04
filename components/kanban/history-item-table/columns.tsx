@@ -8,7 +8,7 @@ import { ColumnDef } from '@tanstack/react-table'
 // 列は、テーブルがどのように表示されるかの中核を定義する場所です。列は、表示されるデータ、そのデータの書式設定、並べ替え、フィルタリング方法を定義します。
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type DeletedItemColumn = {
+export type HistoryItemColumn = {
   id: ItemId
   taskId: string
   title: string
@@ -80,4 +80,4 @@ export const columns = [
       <DataTableColumnHeader column={column} title="作成日" />
     ),
   },
-] satisfies ColumnDef<DeletedItemColumn>[]
+] satisfies ColumnDef<HistoryItemColumn>[]

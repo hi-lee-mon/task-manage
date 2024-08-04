@@ -14,12 +14,12 @@ import useLocalStorageState from 'use-local-storage-state'
 
 type ContextType = {
   items: ItemType[]
-  deletedItems: ItemType[]
+  historyItems: ItemType[]
   setItems: Dispatch<SetStateAction<ItemType[]>>
   addItem: (form: ItemFormSchemaType, containerId: UniqueIdentifier) => void
   editItem: (form: ItemFormSchemaType, itemId: ItemId) => void
   deleteItem: (itemId: ItemId) => void
-  restoreItems: (deletedItemIds: ItemId[]) => void
+  restoreHistoryItems: (historyItemIds: ItemId[]) => void
 }
 
 const Context = createContext<ContextType>({} as ContextType)
@@ -28,8 +28,8 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useLocalStorageState<ItemType[]>('items', {
     defaultValue: [],
   })
-  const [deletedItems, setDeletedItems] = useLocalStorageState<ItemType[]>(
-    'deletedItems',
+  const [historyItems, setHistoryItems] = useLocalStorageState<ItemType[]>(
+    'historyItems',
     {
       defaultValue: [],
     },
@@ -64,23 +64,23 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
     setItems((prevItems) => {
       return prevItems.filter((item) => item.id !== itemId)
     })
-    setDeletedItems((prevItems) => {
+    setHistoryItems((prevItems) => {
       const i = items.find((item) => item.id === itemId)
       return i ? [...prevItems, i] : prevItems
     })
   }
 
-  const restoreItems = (restoreItemIds: ItemId[]) => {
+  const restoreHistoryItems = (historyItemIds: ItemId[]) => {
     setItems((prevItems) => {
-      return restoreItemIds.reduce((acc, restoreItemId) => {
-        const restoreItem = deletedItems.find(
-          (item) => item.id === restoreItemId,
+      return historyItemIds.reduce((accumulator, historyItemId) => {
+        const restoreItem = historyItems.find(
+          (item) => item.id === historyItemId,
         )
-        return restoreItem ? [restoreItem, ...acc] : acc
+        return restoreItem ? [restoreItem, ...accumulator] : accumulator
       }, prevItems)
     })
-    setDeletedItems((prevItems) => {
-      return prevItems.filter((item) => !restoreItemIds.includes(item.id))
+    setHistoryItems((prevItems) => {
+      return prevItems.filter((item) => !historyItemIds.includes(item.id))
     })
   }
 
@@ -88,12 +88,12 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
     <Context.Provider
       value={{
         items,
-        deletedItems,
+        historyItems,
         setItems,
         addItem,
         editItem,
         deleteItem,
-        restoreItems,
+        restoreHistoryItems,
       }}
     >
       {children}

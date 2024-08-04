@@ -42,20 +42,20 @@ import {
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CommandList } from 'cmdk'
-import { columns, DeletedItemColumn } from './columns'
+import { columns, HistoryItemColumn } from './columns'
 
 interface DataTableProps {
   columns: typeof columns
-  data: DeletedItemColumn[]
+  data: HistoryItemColumn[]
 }
 
-export function DeletedItemTable({ columns, data }: DataTableProps) {
+export function HistoryItemTable({ columns, data }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = useState({})
   const [openCombobox, setOpenCombobox] = useState(false)
   const [comboboxValue, setComboboxValue] = useState<string>('title')
-  const { restoreItems } = useItemContext()
+  const { restoreHistoryItems } = useItemContext()
   const { toast } = useToast()
 
   const filterTargetOptions = columns.map((column) => ({
@@ -220,7 +220,7 @@ export function DeletedItemTable({ columns, data }: DataTableProps) {
               })
               return
             }
-            restoreItems(originalRowIds)
+            restoreHistoryItems(originalRowIds)
             setRowSelection({})
           }}
         >
