@@ -17,7 +17,7 @@ export type DeletedItemColumn = {
   cratedAt: string
 }
 
-export const columns: ColumnDef<DeletedItemColumn>[] = [
+export const columns = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -80,4 +80,4 @@ export const columns: ColumnDef<DeletedItemColumn>[] = [
       <DataTableColumnHeader column={column} title="作成日" />
     ),
   },
-]
+] satisfies ColumnDef<DeletedItemColumn>[]

@@ -41,7 +41,7 @@ export function ItemContextProvider({ children }: { children: ReactNode }) {
       containerId,
       ...form,
       hours: form.hours,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }),
     }
     setItems((prev) => [newItem, ...prev])
   }

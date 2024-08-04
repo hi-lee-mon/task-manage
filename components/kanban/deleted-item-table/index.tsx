@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  AccessorKeyColumnDef,
   ColumnFiltersState,
   SortingState,
   flexRender,
@@ -43,16 +42,14 @@ import {
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CommandList } from 'cmdk'
+import { columns, DeletedItemColumn } from './columns'
 
-interface DataTableProps<TData, TValue> {
-  columns: AccessorKeyColumnDef<TData, TValue>[]
-  data: TData[]
+interface DataTableProps {
+  columns: typeof columns
+  data: DeletedItemColumn[]
 }
 
-export function DeletedItemTable<
-  TData extends { id: string | number },
-  TValue,
->({ columns, data }: DataTableProps<TData, TValue>) {
+export function DeletedItemTable({ columns, data }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = useState({})
@@ -61,16 +58,15 @@ export function DeletedItemTable<
   const { restoreItems } = useItemContext()
   const { toast } = useToast()
 
-  const filterOptions = columns
-    .map((column) => ({
-      value: column.accessorKey,
-      label: column.meta,
-    }))
-    .filter((option) => option.value) as { value: string; label: string }[] // TODO:as使用しない方法を考えたい
+  const filterTargetOptions = columns.map((column) => ({
+    value: column.accessorKey,
+    label: column.meta,
+  }))
 
   const selectedComboboxLabel =
-    filterOptions.find((filterOption) => filterOption.value === comboboxValue)
-      ?.label || ''
+    filterTargetOptions.find(
+      (filterColumn) => filterColumn.value === comboboxValue,
+    )?.label || ''
 
   const table = useReactTable({
     data,
@@ -117,7 +113,7 @@ export function DeletedItemTable<
               <CommandEmpty>検索対象が見つかりません</CommandEmpty>
               <CommandGroup>
                 <CommandList>
-                  {filterOptions.map((option) => (
+                  {filterTargetOptions.map((option) => (
                     <CommandItem
                       key={option.value}
                       value={option.value}
