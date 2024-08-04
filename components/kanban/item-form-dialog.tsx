@@ -27,13 +27,26 @@ import { Button } from '../ui/button'
 import { Textarea } from '../ui/textarea'
 import { ItemFormSchemaType, itemFormSchema } from './itemFormSchema'
 
-type Props = {
+type CreateProps = {
   dialogTitle: string
   triggerContent: React.ReactNode
   submitText: string
   targetId: ContainerId | ItemId
-  defaultValues?: ItemFormSchemaType
-  isContinuousCreation?: boolean
+  defaultValues?: undefined
+  isContinuousCreation?: undefined
+  handleSubmit: (
+    form: ItemFormSchemaType,
+    containerId: UniqueIdentifier,
+  ) => void
+}
+
+type UpdateProps = {
+  dialogTitle: string
+  triggerContent: React.ReactNode
+  submitText: string
+  targetId: ContainerId | ItemId
+  defaultValues: ItemFormSchemaType
+  isContinuousCreation?: undefined
   handleSubmit: (
     form: ItemFormSchemaType,
     containerId: UniqueIdentifier,
@@ -49,7 +62,7 @@ const DEFAULT_VALUES: ItemFormSchemaType = {
   links: [],
 }
 
-export default function ItemFormDialog(props: Props) {
+export default function ItemFormDialog(props: CreateProps | UpdateProps) {
   const {
     dialogTitle,
     triggerContent,

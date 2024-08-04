@@ -66,7 +66,6 @@ export default function Container(props: ContainerProps) {
         }}
         targetId={container.id}
         submitText="追加"
-        isContinuousCreation
       />
       <h1 className="flex text-xl border-b pb-2 mb-6">
         {container.title}
