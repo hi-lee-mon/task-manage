@@ -282,9 +282,6 @@ export const AlertDialogDemo = (props: {
 }) => {
   return (
     <AlertDialog open={props.isOpen}>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
-      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>本当に削除して良いですか？</AlertDialogTitle>
